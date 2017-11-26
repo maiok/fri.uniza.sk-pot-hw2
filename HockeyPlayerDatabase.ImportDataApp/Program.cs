@@ -15,8 +15,8 @@ namespace HockeyPlayerDatabase.ImportDataApp
 
             using (var db = new HockeyContext())
             {
-                Club club = new Club("Treti klub", "Kukucinova 2, Zilina", "http://url");
-                db.InsertClub(club);
+                //Club club = new Club("Treti klub", "Kukucinova 2, Zilina", "http://url");
+                //db.InsertClub(club);
 
                 // lezie do bezparametrickeho konstruktora, why?
                 var query = from b in db.Clubs
@@ -25,7 +25,7 @@ namespace HockeyPlayerDatabase.ImportDataApp
 
                 foreach (var item in query)
                 {
-                    Console.WriteLine(item.Name);
+                    Console.WriteLine(item.ToString());
                 }
 
                 Console.WriteLine("Koniec");

@@ -18,7 +18,7 @@ namespace HockeyPlayerDatabase.Model
 
         public Player()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public int Id { get; set; }
