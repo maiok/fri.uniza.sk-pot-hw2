@@ -1,20 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using HockeyPlayerDatabase.Interfaces;
 
 namespace HockeyPlayerDatabase.Model
 {
     public class Club : IClub
     {
-        public Club(int id, string name, string address, string url)
+        public Club(string name, string address, string url)
         {
-            Id = id;
-            Name = name;
-            Address = address;
-            Url = url;
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Address = address ?? throw new ArgumentNullException(nameof(address));
+            Url = url ?? throw new ArgumentNullException(nameof(url));
         }
 
         public int Id { get; set; }

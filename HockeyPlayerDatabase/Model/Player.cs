@@ -1,0 +1,31 @@
+﻿using System;
+using HockeyPlayerDatabase.Interfaces;
+
+namespace HockeyPlayerDatabase.Model
+{
+    class Player : IPlayer
+    {
+        public Player(string firstName, string lastName, string fullName, string titleBefore, int yearOfBirth,
+            int krpId, AgeCategory? ageCategory, int? clubId)
+        {
+            FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName));
+            LastName = lastName ?? throw new ArgumentNullException(nameof(lastName));
+            FullName = fullName ?? throw new ArgumentNullException(nameof(fullName));
+            TitleBefore = titleBefore ?? throw new ArgumentNullException(nameof(titleBefore));
+            YearOfBirth = yearOfBirth;
+            KrpId = krpId;
+            AgeCategory = ageCategory;
+            ClubId = clubId;
+        }
+
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string FullName { get; }
+        public string TitleBefore { get; set; }
+        public int YearOfBirth { get; set; }
+        public int KrpId { get; set; }
+        public AgeCategory? AgeCategory { get; set; }
+        public int? ClubId { get; set; }
+    }
+}

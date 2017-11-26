@@ -14,7 +14,7 @@ namespace HockeyPlayerDatabase.ImportDataApp
         {
             Console.WriteLine("HockeyPlayerDatabase");
 
-            Club club = new Club(1, "Prvy klub", "Kukucinova 2, Zilina", "http://url");
+            Club club = new Club("Prvy klub", "Kukucinova 2, Zilina", "http://url");
             Console.WriteLine(club.ToString());
 
 
