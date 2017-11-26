@@ -16,6 +16,11 @@ namespace HockeyPlayerDatabase.Model
             ClubId = clubId;
         }
 
+        public Player()
+        {
+            throw new NotImplementedException();
+        }
+
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -27,6 +32,7 @@ namespace HockeyPlayerDatabase.Model
         public int KrpId { get; set; }
         public AgeCategory? AgeCategory { get; set; }
         public int? ClubId { get; set; }
+        public virtual Club Club { get; set; }
 
         public override string ToString()
         {

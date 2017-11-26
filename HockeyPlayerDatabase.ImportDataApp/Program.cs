@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using HockeyPlayerDatabase.Interfaces;
 using HockeyPlayerDatabase.Model;
 
 namespace HockeyPlayerDatabase.ImportDataApp
@@ -14,11 +13,29 @@ namespace HockeyPlayerDatabase.ImportDataApp
         {
             Console.WriteLine("HockeyPlayerDatabase");
 
-            Club club = new Club("Prvy klub", "Kukucinova 2, Zilina", "http://url");
-            Console.WriteLine(club.ToString());
+            using (var db = new HockeyContext())
+            {
+                Club club = new Club("Treti klub", "Kukucinova 2, Zilina", "http://url");
+                db.InsertClub(club);
 
-            Player player = new Player("Mario", "Kemen", "Hromoblesk", 1991, 1548975, AgeCategory.Midgest, null);
-            Console.WriteLine(player.ToString());
+                // lezie do bezparametrickeho konstruktora, why?
+                var query = from b in db.Clubs
+                    orderby b.Name
+                    select b;
+
+                foreach (var item in query)
+                {
+                    Console.WriteLine(item.Name);
+                }
+
+                Console.WriteLine("Koniec");
+            }
+
+            
+            //Console.WriteLine(club.ToString());
+
+            //Player player = new Player("Mario", "Kemen", "Hromoblesk", 1991, 1548975, AgeCategory.Midgest, null);
+            //Console.WriteLine(player.ToString());
 
             Console.ReadLine();
         }

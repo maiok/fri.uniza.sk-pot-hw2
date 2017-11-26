@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using HockeyPlayerDatabase.Interfaces;
 
 namespace HockeyPlayerDatabase.Model
@@ -12,6 +13,11 @@ namespace HockeyPlayerDatabase.Model
             Url = url ?? throw new ArgumentNullException(nameof(url));
         }
 
+        public Club()
+        {
+            //throw new NotImplementedException();
+        }
+
         public int Id { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
@@ -21,5 +27,7 @@ namespace HockeyPlayerDatabase.Model
         {
             return $"{Id}, {Name}, {Address}, {Url}";
         }
+
+        public virtual List<Player> Players { get; set; }
     }
 }
