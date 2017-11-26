@@ -53,6 +53,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Migrations\201711261927465_InitialCreate.cs" />
+    <Compile Include="Migrations\201711261927465_InitialCreate.Designer.cs">
+      <DependentUpon>201711261927465_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711262044499_AddTest.cs" />
+    <Compile Include="Migrations\201711262044499_AddTest.Designer.cs">
+      <DependentUpon>201711262044499_AddTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711262055502_RemoveTest.cs" />
+    <Compile Include="Migrations\201711262055502_RemoveTest.Designer.cs">
+      <DependentUpon>201711262055502_RemoveTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\HockeyContext.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\Club.cs" />
@@ -63,6 +76,17 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201711261927465_InitialCreate.resx">
+      <DependentUpon>201711261927465_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711262044499_AddTest.resx">
+      <DependentUpon>201711262044499_AddTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711262055502_RemoveTest.resx">
+      <DependentUpon>201711262055502_RemoveTest.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
