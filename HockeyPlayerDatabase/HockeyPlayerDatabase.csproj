@@ -36,6 +36,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="FileHelpers, Version=3.2.7.0, Culture=neutral, PublicKeyToken=3e0c08d59cc3d657, processorArchitecture=MSIL">
+      <HintPath>..\packages\FileHelpers.3.2.7\lib\net45\FileHelpers.dll</HintPath>
+    </Reference>
     <Reference Include="HockeyPlayerDatabase.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\HockeyPlayerDatabase.Interfaces.dll</HintPath>
@@ -65,6 +68,14 @@
     <Compile Include="Migrations\201711262055502_RemoveTest.Designer.cs">
       <DependentUpon>201711262055502_RemoveTest.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711262100352_ClubNotNullAttr.cs" />
+    <Compile Include="Migrations\201711262100352_ClubNotNullAttr.Designer.cs">
+      <DependentUpon>201711262100352_ClubNotNullAttr.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711262104469_NameClubRequired.cs" />
+    <Compile Include="Migrations\201711262104469_NameClubRequired.Designer.cs">
+      <DependentUpon>201711262104469_NameClubRequired.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\HockeyContext.cs" />
     <Compile Include="Model\Player.cs" />
@@ -86,6 +97,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711262055502_RemoveTest.resx">
       <DependentUpon>201711262055502_RemoveTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711262100352_ClubNotNullAttr.resx">
+      <DependentUpon>201711262100352_ClubNotNullAttr.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711262104469_NameClubRequired.resx">
+      <DependentUpon>201711262104469_NameClubRequired.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

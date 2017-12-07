@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Data.Entity.ModelConfiguration.Configuration;
 using HockeyPlayerDatabase.Interfaces;
+using HockeyPlayerDatabase.Migrations;
 
 namespace HockeyPlayerDatabase.Model
 {
@@ -8,9 +11,9 @@ namespace HockeyPlayerDatabase.Model
     {
         public Club(string name, string address, string url)
         {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-            Address = address ?? throw new ArgumentNullException(nameof(address));
-            Url = url ?? throw new ArgumentNullException(nameof(url));
+            Name = name;
+            Address = address;
+            Url = url;
         }
 
         public Club()
@@ -19,6 +22,7 @@ namespace HockeyPlayerDatabase.Model
         }
 
         public int Id { get; set; }
+        [Required]
         public string Name { get; set; }
         public string Address { get; set; }
         public string Url { get; set; }
@@ -28,6 +32,7 @@ namespace HockeyPlayerDatabase.Model
             return $"{Id}, {Name}, {Address}, {Url}";
         }
 
+        // Vytvorenie vztahu 1:N s hracmi
         public virtual List<Player> Players { get; set; }
     }
 }

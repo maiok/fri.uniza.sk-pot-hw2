@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HockeyPlayerDatabase", "Hoc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HockeyPlayerDatabase.ImportDataApp", "HockeyPlayerDatabase.ImportDataApp\HockeyPlayerDatabase.ImportDataApp.csproj", "{058FA143-8916-45F6-BDC5-AFE43E2B9C46}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HockeyPlayerDatabase.MainApp", "HockeyPlayerDatabase.MainApp\HockeyPlayerDatabase.MainApp.csproj", "{3232C057-8103-4004-8516-9D3DD750D128}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{058FA143-8916-45F6-BDC5-AFE43E2B9C46}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{058FA143-8916-45F6-BDC5-AFE43E2B9C46}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{058FA143-8916-45F6-BDC5-AFE43E2B9C46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3232C057-8103-4004-8516-9D3DD750D128}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3232C057-8103-4004-8516-9D3DD750D128}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3232C057-8103-4004-8516-9D3DD750D128}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3232C057-8103-4004-8516-9D3DD750D128}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

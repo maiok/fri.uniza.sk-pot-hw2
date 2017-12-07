@@ -11,6 +11,7 @@ namespace HockeyPlayerDatabase.Model
             LastName = lastName ?? throw new ArgumentNullException(nameof(lastName));
             TitleBefore = titleBefore ?? throw new ArgumentNullException(nameof(titleBefore));
             YearOfBirth = yearOfBirth;
+
             KrpId = krpId;
             AgeCategory = ageCategory;
             ClubId = clubId;
