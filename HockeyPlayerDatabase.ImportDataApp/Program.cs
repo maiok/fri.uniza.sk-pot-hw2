@@ -56,6 +56,7 @@ namespace HockeyPlayerDatabase.ImportDataApp
                 //Club club = new Club("Testovaci klub", "Kukucinova 2, Zilina", "http://url");
                 //db.InsertClub(club);
 
+
                 // lezie do bezparametrickeho konstruktora
                 // LINQ
                 var query = db.GetClubs();
@@ -82,7 +83,7 @@ namespace HockeyPlayerDatabase.ImportDataApp
          * zdroj: http://www.filehelpers.net/example/QuickStart/ReadFileDelimited/
          */
 
-        private static void ImportClubs(var engine, String path)
+        private void ImportClubs(var engine, String path)
         {
             var records = engine.ReadFile(path);
 
