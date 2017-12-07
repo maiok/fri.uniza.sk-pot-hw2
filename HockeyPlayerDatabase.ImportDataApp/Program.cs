@@ -98,6 +98,8 @@ namespace HockeyPlayerDatabase.ImportDataApp
                     Console.WriteLine(record.Krp);
                     Console.WriteLine(record.MaterskyKlub);
                     Console.WriteLine(record.VekovaKategoria);
+
+                    // todo insert do db
                 }
                 else
                 {
@@ -119,7 +121,6 @@ namespace HockeyPlayerDatabase.ImportDataApp
         public String Nazov;
         public String Adresa;
         public String Url;
-        public String Empty; // kvoli poslednej bodkociarke
     }
 
     [DelimitedRecord(";")]

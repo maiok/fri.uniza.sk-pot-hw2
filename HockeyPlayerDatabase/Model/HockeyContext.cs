@@ -11,6 +11,7 @@ namespace HockeyPlayerDatabase.Model
     {
         public IQueryable<Club> GetClubs()
         {
+            // todo methodChain
             IQueryable<Club> clubsQuery =
                 from b in this.Clubs
                 orderby b.Name
@@ -24,9 +25,15 @@ namespace HockeyPlayerDatabase.Model
             throw new NotImplementedException();
         }
 
+        // todo toList
         public IEnumerable<Club> GetSortedClubs(int maxResultCount)
         {
-            throw new NotImplementedException();
+			IQueryable<Club> clubsQuery =
+				from b in this.Clubs
+				orderby b.Name
+				select b;
+
+            return clubsQuery.ToList();
         }
 
         public IEnumerable<Player> GetSortedPlayers(int maxResultCount)
@@ -64,9 +71,16 @@ namespace HockeyPlayerDatabase.Model
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Gets the report by age category.
+        /// </summary>
+        /// <returns>The report by age category.</returns>
         public IDictionary<AgeCategory, ReportResult> GetReportByAgeCategory()
         {
             throw new NotImplementedException();
+            // todo zlozity linq vyraz
+            // pozriet groupby mozno vrati dictionary
+            // cize grupovanie
         }
 
         public void SaveToXml(string fileName)
