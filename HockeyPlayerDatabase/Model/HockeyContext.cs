@@ -104,6 +104,34 @@ namespace HockeyPlayerDatabase.Model
             SaveChanges();
         }
 
+        public void InsertPlayer(Player player)
+        {
+            Players.Add(player);
+            SaveChanges();
+        }
+
+        public void ClearDatabase()
+        {
+            this.Database.ExecuteSqlCommand("DELETE FROM dbo.Players");
+            this.Database.ExecuteSqlCommand("DELETE FROM dbo.Clubs");
+            SaveChanges();
+        }
+
+        public int? GetClubIdByName(string name)
+        {
+            var query =
+                from b in this.Clubs
+                where b.Name.Contains(name)
+                select b.Id;
+
+            if (query.ToArray().Length > 0)
+            {
+                return Int32.Parse(query.ToArray().GetValue(0).ToString());
+            }
+
+            return null;
+        }
+
         // Add a DbSet for each entity type that you want to include in your model. For more information 
         // on configuring and using a Code First model, see http://go.microsoft.com/fwlink/?LinkId=390109.
 

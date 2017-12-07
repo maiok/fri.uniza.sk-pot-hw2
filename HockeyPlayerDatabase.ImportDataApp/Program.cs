@@ -1,25 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
+using System.Globalization;
 using System.Linq;
-using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using FileHelpers;
+using HockeyPlayerDatabase.Interfaces;
 using HockeyPlayerDatabase.Model;
 
 namespace HockeyPlayerDatabase.ImportDataApp
 {
+
+    /// <summary>
+    /// 
+    /// ZDROJE
+    /// 
+    /// Prve pismeno velke - https://msdn.microsoft.com/en-us/library/system.globalization.textinfo.totitlecase.aspx
+    /// CSVParser - http://www.filehelpers.net/example/QuickStart/ReadFileDelimited/
+    /// </summary>
+
     class Program
     {
-
-        private static string _clubsCsvPath, _playersCsvPath;
-        private static bool _clearDatabase = false;
+        private static HockeyContext dbContext;
+        private static string clubsCsvPath;
+        private static string playersCsvPath;
 
         static void Main(string[] args)
         {
             Console.WriteLine("HockeyPlayerDatabase - import dat");
+            dbContext = new HockeyContext();
 
             try
             {
@@ -29,88 +35,100 @@ namespace HockeyPlayerDatabase.ImportDataApp
                 {
                     if (arg == "-clubs")
                     {
-                        _clubsCsvPath = args[order + 1];
-                        var engine = new FileHelperEngine<ClubsHeader>();
-                        ImportClubs(engine, arg);
+                        clubsCsvPath = args[order + 1];
                     }
-                    if (arg == "-players")
+                    else if (arg == "-players")
                     {
-                        _playersCsvPath = args[order + 1];
-                        //ProcessCsvFile(_playersCsvPath, arg);
-                    }
-                    if (arg == "-clearDatabase")
-                    {
-                        _clearDatabase = true;
+                        playersCsvPath = args[order + 1];
                     }
                     order++;
                 }
+
+                // zmazat data ak je nastaveny argument
+                if (args.Contains("-clearDatabase"))
+                {
+                    dbContext.ClearDatabase();
+                }
+
+                FileHelperEngine<ClubsHeader> engineClubs = new FileHelperEngine<ClubsHeader>();
+                ImportClubs(engineClubs, clubsCsvPath);
+                FileHelperEngine<PlayersHeader> enginePlayers = new FileHelperEngine<PlayersHeader>();
+                ImportPlayers(enginePlayers, playersCsvPath);
+
             }
             catch (Exception e)
             {
-                Console.WriteLine("Nastala chyba pri citani argumentov.");
+                Console.WriteLine($"Neocakavana chyba pri spracovani importu: {e}");
             }
 
-            // sqlconnection tu? namiesto hockeycontext alebo nejaky controller
-            using (var db = new HockeyContext())
-            {
-                //Club club = new Club("Testovaci klub", "Kukucinova 2, Zilina", "http://url");
-                //db.InsertClub(club);
-
-
-                // lezie do bezparametrickeho konstruktora
-                // LINQ
-                var query = db.GetClubs();
-
-                // vypis zo selectu
-                foreach (var item in query)
-                {
-                    Console.WriteLine(item.ToString());
-                }
-
-                Console.WriteLine("Koniec");
-            }
-
-
-            //Console.WriteLine(club.ToString());
-
-            //Player player = new Player("Mario", "Kemen", "Hromoblesk", 1991, 1548975, AgeCategory.Midgest, null);
-            //Console.WriteLine(player.ToString());
-
+            Console.WriteLine("Import bol uspesne dokonceny.");
             Console.ReadLine();
+
         }
 
-        /*
-         * zdroj: http://www.filehelpers.net/example/QuickStart/ReadFileDelimited/
-         */
-
-        private void ImportClubs(var engine, String path)
+        private static void ImportClubs(FileHelperEngine<ClubsHeader> engine, String csvPath)
         {
-            var records = engine.ReadFile(path);
+            var records = engine.ReadFile(csvPath);
 
-            foreach (var record in records)
+            foreach (var record in records.Skip(1))
             {
-                if (objType == "-clubs")
-                {
-                    Console.WriteLine(record.Priezvisko);
-                    Console.WriteLine(record.Meno);
-                    Console.WriteLine(record.TitulPred);
-                    Console.WriteLine(record.RokNarodenia);
-                    Console.WriteLine(record.Krp);
-                    Console.WriteLine(record.MaterskyKlub);
-                    Console.WriteLine(record.VekovaKategoria);
+                Club club = new Club();
+                club.Name = record.Nazov;
+                club.Address = record.Adresa;
+                club.Url = record.Url;
 
-                    // todo insert do db
+                dbContext.InsertClub(club);
+            }
+            
+        }
+
+        private static void ImportPlayers(FileHelperEngine<PlayersHeader> engine, String csvPath)
+        {
+            var records = engine.ReadFile(csvPath);
+
+            // pouzijem pre pracu so stylom textu
+            TextInfo textInfo = new CultureInfo("sk-SK", false).TextInfo;
+
+            // rozparsujem data okrem 1. riadku (hlavicka)
+            foreach (var record in records.Skip(1))
+            {
+                string priezvisko = record.Priezvisko.ToLower();
+                priezvisko = textInfo.ToTitleCase(priezvisko); // potom capitalize
+
+                string meno = record.Meno.ToLower();
+                meno = textInfo.ToTitleCase(meno);
+
+                int? materskyKlub = dbContext.GetClubIdByName(record.MaterskyKlub);
+
+                AgeCategory vekovaKategoria;
+                if (record.VekovaKategoria.ToLower().Contains("kadet"))
+                {
+                    vekovaKategoria = AgeCategory.Cadet;
+                }
+                else if (record.VekovaKategoria.ToLower().Contains("dorast"))
+                {
+                    vekovaKategoria = AgeCategory.Midgest;
+                }
+                else if (record.VekovaKategoria.ToLower().Contains("junior"))
+                {
+                    vekovaKategoria = AgeCategory.Junior;
                 }
                 else
                 {
-                    Console.WriteLine(record.Priezvisko);
-                    Console.WriteLine(record.Meno);
-                    Console.WriteLine(record.TitulPred);
-                    Console.WriteLine(record.RokNarodenia);
-                    Console.WriteLine(record.Krp);
-                    Console.WriteLine(record.MaterskyKlub);
-                    Console.WriteLine(record.VekovaKategoria);
+                    vekovaKategoria = AgeCategory.Senior;
                 }
+
+                Player player = new Player();
+                player.LastName = priezvisko;
+                player.FirstName = meno;
+                player.TitleBefore = record.TitulPred;
+                player.YearOfBirth = Int32.Parse(record.RokNarodenia);
+                player.KrpId = Int32.Parse(record.Krp);
+                player.ClubId = materskyKlub;
+                player.AgeCategory = vekovaKategoria;
+
+                dbContext.InsertPlayer(player);
+
             }
         }
     }
@@ -118,22 +136,22 @@ namespace HockeyPlayerDatabase.ImportDataApp
     [DelimitedRecord(";")]
     public class ClubsHeader
     {
-        public String Nazov;
-        public String Adresa;
-        public String Url;
+        public string Nazov;
+        public string Adresa;
+        public string Url;
     }
 
     [DelimitedRecord(";")]
     public class PlayersHeader
     {
-        public String Priezvisko;
-        public String Meno;
-        public String TitulPred;
-        public String RokNarodenia;
-        public String Krp;
-        public String MaterskyKlub;
-        public String VekovaKategoria;
-        public String Empty;
+        public string Priezvisko;
+        public string Meno;
+        public string TitulPred;
+        public string RokNarodenia;
+        public string Krp;
+        public string MaterskyKlub;
+        public string VekovaKategoria;
+        public string Empty;
 
         //[FieldConverter(ConverterKind.Date, "ddMMyyyy")]
         //public DateTime OrderDate;
