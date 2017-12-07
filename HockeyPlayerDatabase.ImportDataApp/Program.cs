@@ -30,12 +30,13 @@ namespace HockeyPlayerDatabase.ImportDataApp
                     if (arg == "-clubs")
                     {
                         _clubsCsvPath = args[order + 1];
-                        //ProcessCsvFile(_clubsCsvPath);
+                        var engine = new FileHelperEngine<ClubsHeader>();
+                        ImportClubs(engine, arg);
                     }
                     if (arg == "-players")
                     {
                         _playersCsvPath = args[order + 1];
-                        ProcessCsvFile(_playersCsvPath);
+                        //ProcessCsvFile(_playersCsvPath, arg);
                     }
                     if (arg == "-clearDatabase")
                     {
@@ -80,26 +81,48 @@ namespace HockeyPlayerDatabase.ImportDataApp
         /*
          * zdroj: http://www.filehelpers.net/example/QuickStart/ReadFileDelimited/
          */
-        private static void ProcessCsvFile(String path)
+
+        private static void ImportClubs(var engine, String path)
         {
-            var engine = new FileHelperEngine<ImportPlayers>();
             var records = engine.ReadFile(path);
 
             foreach (var record in records)
             {
-                Console.WriteLine(record.Priezvisko);
-                Console.WriteLine(record.Meno);
-                Console.WriteLine(record.TitulPred);
-                Console.WriteLine(record.RokNarodenia);
-                Console.WriteLine(record.Krp);
-                Console.WriteLine(record.MaterskyKlub);
-                Console.WriteLine(record.VekovaKategoria);
+                if (objType == "-clubs")
+                {
+                    Console.WriteLine(record.Priezvisko);
+                    Console.WriteLine(record.Meno);
+                    Console.WriteLine(record.TitulPred);
+                    Console.WriteLine(record.RokNarodenia);
+                    Console.WriteLine(record.Krp);
+                    Console.WriteLine(record.MaterskyKlub);
+                    Console.WriteLine(record.VekovaKategoria);
+                }
+                else
+                {
+                    Console.WriteLine(record.Priezvisko);
+                    Console.WriteLine(record.Meno);
+                    Console.WriteLine(record.TitulPred);
+                    Console.WriteLine(record.RokNarodenia);
+                    Console.WriteLine(record.Krp);
+                    Console.WriteLine(record.MaterskyKlub);
+                    Console.WriteLine(record.VekovaKategoria);
+                }
             }
         }
     }
 
     [DelimitedRecord(";")]
-    public class ImportPlayers
+    public class ClubsHeader
+    {
+        public String Nazov;
+        public String Adresa;
+        public String Url;
+        public String Empty; // kvoli poslednej bodkociarke
+    }
+
+    [DelimitedRecord(";")]
+    public class PlayersHeader
     {
         public String Priezvisko;
         public String Meno;
@@ -108,7 +131,7 @@ namespace HockeyPlayerDatabase.ImportDataApp
         public String Krp;
         public String MaterskyKlub;
         public String VekovaKategoria;
-        public String empty;
+        public String Empty;
 
         //[FieldConverter(ConverterKind.Date, "ddMMyyyy")]
         //public DateTime OrderDate;
