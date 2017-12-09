@@ -107,10 +107,11 @@
         </member>
         <member name="M:HockeyPlayerDatabase.Interfaces.IHockeyReport`2.GetClubPlayerAges">
             <summary>
-            Vrati vek hracov z najvacsieho klubu bez duplicit utriedeny podla poctu hracov zostupne.
-            (Pomocka - jedno z moznych rieseni: zoskupte vsetkych hracov z najvacsieho klubu (vyselektujte si jeden klub, ktory ma 
-            najvacsi pocet hracov) podla ich veku, utriedte ich podla poctu hracov zostupne (od najvacsieho 
-            poctu po najmensi) a takto vyselektujte vsetky ich veky).
+            Vrati vek hracov z najvacsieho klubu bez duplicit utriedeny podla poctu hracov zoskupenych podla veku zostupne.
+            (Pomocka - jedno z moznych rieseni: vyselektujte najvacsi klub (klub, ktory ma najvacsi pocet hracov) 
+            a v nom zoskupte vsetkych hracov podla ich veku, pricom takto ziskane skupiny hracov utriedte 
+            podla poctu hracov v skupinach zostupne (od najvacsieho po najmensi pocet hracov hracov),
+            a nasledne vyselektujte vsetky ich veky).
             </summary>
         </member>
         <member name="M:HockeyPlayerDatabase.Interfaces.IHockeyReport`2.GetPlayersByAge(System.Int32,System.Int32)">

@@ -20,9 +20,15 @@ namespace HockeyPlayerDatabase.Model
             return clubsQuery;
         }
 
+
         public IQueryable<Player> GetPlayers()
         {
-            throw new NotImplementedException();
+            IQueryable<Player> players =
+                from p in this.Players
+                orderby p.FirstName
+                select p;
+
+            return players;
         }
 
         // todo toList
