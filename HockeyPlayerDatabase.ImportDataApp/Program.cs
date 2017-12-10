@@ -79,7 +79,7 @@ namespace HockeyPlayerDatabase.ImportDataApp
 
                 dbContext.InsertClub(club);
             }
-            
+
         }
 
         private static void ImportPlayers(FileHelperEngine<PlayersHeader> engine, String csvPath)
@@ -118,45 +118,57 @@ namespace HockeyPlayerDatabase.ImportDataApp
                     vekovaKategoria = AgeCategory.Senior;
                 }
 
-                Player player = new Player();
-                player.LastName = priezvisko;
-                player.FirstName = meno;
-                player.TitleBefore = record.TitulPred;
-                player.YearOfBirth = Int32.Parse(record.RokNarodenia);
-                player.KrpId = Int32.Parse(record.Krp);
-                player.ClubId = materskyKlub;
-                player.AgeCategory = vekovaKategoria;
+                try
+                {
+                    var player = new Player
+                    {
+                        LastName = priezvisko,
+                        FirstName = meno,
+                        TitleBefore = record.TitulPred,
+                        YearOfBirth = int.Parse(record.RokNarodenia),
+                        KrpId = int.Parse(record.Krp),
+                        ClubId = materskyKlub,
+                        AgeCategory = vekovaKategoria
+                    };
 
-                dbContext.InsertPlayer(player);
+                    if (dbContext.GetPlayerByKrp(player.KrpId).Count > 0)
+                    {
+                        Console.WriteLine($@"Hrac s KRP {player.KrpId} uz v systeme existuje, preto nebude vlozeny.");
+                    }
+                    else
+                    {
+                        dbContext.InsertPlayer(player);
+                    }
 
+                }
+                catch (Exception)
+                {
+                    // ignored
+                }
             }
+
         }
     }
+}
 
-    [DelimitedRecord(";")]
-    public class ClubsHeader
-    {
-        public string Nazov;
-        public string Adresa;
-        public string Url;
-    }
+[DelimitedRecord(";")]
+public class ClubsHeader
+{
+    public string Nazov;
+    public string Adresa;
+    public string Url;
+}
 
-    [DelimitedRecord(";")]
-    public class PlayersHeader
-    {
-        public string Priezvisko;
-        public string Meno;
-        public string TitulPred;
-        public string RokNarodenia;
-        public string Krp;
-        public string MaterskyKlub;
-        public string VekovaKategoria;
-        public string Empty;
-
-        //[FieldConverter(ConverterKind.Date, "ddMMyyyy")]
-        //public DateTime OrderDate;
-
-        //[FieldConverter(ConverterKind.Decimal, ".")] // The decimal separator is .
-        //public decimal Freight;
-    }
+[DelimitedRecord(";")]
+public class PlayersHeader
+{
+    public string Priezvisko;
+    public string Meno;
+    public string TitulPred;
+    public string RokNarodenia;
+    public string Krp;
+    public string MaterskyKlub;
+    public string VekovaKategoria;
+    // Toto je tu z dovodu, ze v kazdom riadku hraci.csv je bodkociarka navyse
+    public string Empty;
 }

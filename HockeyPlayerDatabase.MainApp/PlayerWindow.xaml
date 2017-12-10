@@ -1,0 +1,43 @@
+﻿<Window x:Class="HockeyPlayerDatabase.MainApp.PlayerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HockeyPlayerDatabase.MainApp"
+        mc:Ignorable="d"
+        Title="Player" Height="300" Width="300" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="85"/>
+            <ColumnDefinition Width="175*"/>
+        </Grid.ColumnDefinitions>
+        <Button Name="ButtonCancelPlayer" Content="Cancel" HorizontalAlignment="Right" Margin="0,0,5,10" Grid.Row="7" VerticalAlignment="Top" Width="60" Grid.ColumnSpan="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Height="20" Click="ButtonCancelPlayer_Click" />
+        <Button Name="ButtonOkPlayer" Content="OK" HorizontalAlignment="Right" Margin="0,0,75,0" Grid.Row="7" VerticalAlignment="Top" Width="60" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" Height="20"
+                Grid.ColumnSpan="2" Click="ButtonOkPlayer_Click"/>
+        <TextBlock Margin="5,0,0,0" TextWrapping="Wrap" Text="KRP:" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        <TextBlock Margin="5,0,0,0" TextWrapping="Wrap" Text="Title before:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1"/>
+        <TextBlock Margin="5,0,0,0" TextWrapping="Wrap" Text="First name:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2"/>
+        <TextBlock Margin="5,0,0,0" TextWrapping="Wrap" Text="Last name:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3"/>
+        <TextBlock Margin="5,0,0,0" TextWrapping="Wrap" Text="Year of birth:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="4"/>
+        <TextBlock Margin="5,0,0,0" TextWrapping="Wrap" Text="Age category:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="5"/>
+        <TextBlock Margin="10,0,0,0" TextWrapping="Wrap" Text="Club:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="6"/>
+        <TextBox Name="TextBoxKrp" Grid.Column="1" Margin="0,0,5,0" TextWrapping="Wrap" VerticalAlignment="Center" Height="20"/>
+        <TextBox Name="TextBoxTitleBefore" Grid.Column="1" Margin="0,0,5,0" TextWrapping="Wrap" VerticalAlignment="Center" Height="20" Grid.Row="1"/>
+        <TextBox Name="TextBoxFirstName" Grid.Column="1" Margin="0,0,5,0" TextWrapping="Wrap" VerticalAlignment="Center" Height="20" Grid.Row="2"/>
+        <TextBox Name="TextBoxLastName" Grid.Column="1" Margin="0,0,5,0" TextWrapping="Wrap" VerticalAlignment="Center" Height="20" Grid.Row="3"/>
+        <TextBox Name="TextBoxYearOfBirth" Grid.Column="1" Margin="0,0,5,0" TextWrapping="Wrap" VerticalAlignment="Center" Height="20" Grid.Row="4"/>
+        <ComboBox Name="ComboBoxAgeCategories" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,5,0" Grid.Row="5" VerticalAlignment="Center" Height="20" ItemsSource="{Binding DataAgeCategories}" SelectedIndex="0"/>
+        <ComboBox Name="ComboBoxClubs" Grid.Column="1" HorizontalAlignment="Left" Margin="0" Grid.Row="6" VerticalAlignment="Center" Height="20" ItemsSource="{Binding DataClubs}" SelectedIndex="0"/>
+
+    </Grid>
+</Window>

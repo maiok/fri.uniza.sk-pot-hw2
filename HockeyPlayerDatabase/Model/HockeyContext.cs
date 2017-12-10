@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+using System.Xml.Linq;
 using HockeyPlayerDatabase.Interfaces;
 
 namespace HockeyPlayerDatabase.Model
@@ -20,12 +22,22 @@ namespace HockeyPlayerDatabase.Model
             return clubsQuery;
         }
 
+        public IQueryable<String> GetClubsName()
+        {
+            IQueryable<String> clubsQuery =
+                from b in this.Clubs
+                orderby b.Name
+                select b.Name;
+
+            return clubsQuery;
+        }
+
 
         public IQueryable<Player> GetPlayers()
         {
             IQueryable<Player> players =
                 from p in this.Players
-                orderby p.FirstName
+                orderby p.LastName
                 select p;
 
             return players;
@@ -34,10 +46,10 @@ namespace HockeyPlayerDatabase.Model
         // todo toList
         public IEnumerable<Club> GetSortedClubs(int maxResultCount)
         {
-			IQueryable<Club> clubsQuery =
-				from b in this.Clubs
-				orderby b.Name
-				select b;
+            IQueryable<Club> clubsQuery =
+                from b in this.Clubs
+                orderby b.Name
+                select b;
 
             return clubsQuery.ToList();
         }
@@ -89,9 +101,109 @@ namespace HockeyPlayerDatabase.Model
             // cize grupovanie
         }
 
+        /*
+         * Do filename posielam absolutnu cestu k suboru
+         * zdroj: http://www.dotnettricks.com/learn/linq/create-xml-from-database-using-linq
+         */
         public void SaveToXml(string fileName)
         {
-            throw new NotImplementedException();
+            XElement mainXML = new XElement("ROOT");
+
+            XElement clubsXml = new XElement("Clubs",
+                (from c in this.Clubs
+                 select new
+                 {
+                     c.Id,
+                     c.Name,
+                     c.Address,
+                     c.Url
+                 }).ToList().Select(
+                    x => new XElement("Club",
+                        new XAttribute("ID", x.Id),
+                        new XAttribute("Name", x.Name),
+                        new XAttribute("Address", x.Address),
+                        new XAttribute("Url", x.Url)
+                    )));
+
+            XElement playersXml = new XElement("Players",
+                (from p in this.Players
+                    select new
+                    {
+                        p.Id,
+                        p.FirstName,
+                        p.LastName,
+                        p.TitleBefore,
+                        p.YearOfBirth,
+                        p.KrpId,
+                        p.AgeCategory,
+                        p.Club.Name
+                    }).ToList().Select(
+                    x => new XElement("Player",
+                        new XAttribute("ID", x.Id),
+                        new XAttribute("FirstName", x.FirstName),
+                        new XAttribute("LastName", x.LastName),
+                        new XAttribute("TitleBefore", x.TitleBefore),
+                        new XAttribute("YearOfBirth", x.YearOfBirth),
+                        new XAttribute("KRP", x.KrpId),
+                        new XAttribute("AgeCategory", x.AgeCategory),
+                        new XAttribute("Club", x.Name)
+                    )));
+
+            mainXML.Add(clubsXml);
+            mainXML.Add(playersXml);
+
+            mainXML.Save(fileName);
+
+            Console.WriteLine(mainXML);
+        }
+
+        public List<Player> ApplyFilterPlayers(int? krpId, String firstName, String lastName, int? birthFrom,
+            int? birthTo, List<AgeCategory> ageCategories, String club)
+        {
+            // Zakladny full query
+            var query = from p in this.Players
+                        select p;
+            // Where klauzuly
+            // KRP
+            if (krpId != null)
+            {
+                query = query.Where(p => p.KrpId == krpId);
+            }
+            // Meno hraca
+            if (firstName != null)
+            {
+                query = query.Where(p => p.FirstName.Contains(firstName));
+            }
+            //  Priezvisko
+            if (lastName != null)
+            {
+                query = query.Where(p => p.LastName.Contains(lastName));
+            }
+            // Rok narodenia OD
+            if (birthFrom != null)
+            {
+                query = query.Where(p => p.YearOfBirth >= birthFrom);
+            }
+            // Rok narodenia DO
+            if (birthTo != null)
+            {
+                query = query.Where(p => p.YearOfBirth <= birthTo);
+            }
+            // Vekova kategoria
+            if (ageCategories.Count > 0)
+            {
+                query = query.Where(p => ageCategories.Contains((AgeCategory)p.AgeCategory));
+            }
+            // Nazov klubu
+            if (club != null)
+            {
+                query = query.Where(p => p.Club.Name.Contains(club));
+            }
+
+            // OrderBy Priezviska
+            query = query.OrderBy(p => p.LastName);
+
+            return query.ToList();
         }
 
         // Your context has been configured to use a 'HockeyContext' connection string from your application's 
@@ -116,6 +228,22 @@ namespace HockeyPlayerDatabase.Model
             SaveChanges();
         }
 
+        public void UpdatePlayer(Player player)
+        {
+            if (player != null)
+            {
+                Player playerToUpdate = GetPlayerByKrp(player.KrpId)[0];
+                if (playerToUpdate != null)
+                {
+                    RemovePlayer(playerToUpdate);
+                    // Vymazem a vlozim, ja viem, ugly, ale berte to prosim s rezervou
+                    //this.Entry(playerToUpdate).CurrentValues.SetValues(player);
+                }
+                InsertPlayer(player);
+                SaveChanges();
+            }
+        }
+
         public void ClearDatabase()
         {
             this.Database.ExecuteSqlCommand("DELETE FROM dbo.Players");
@@ -136,6 +264,22 @@ namespace HockeyPlayerDatabase.Model
             }
 
             return null;
+        }
+
+        public List<Player> GetPlayerByKrp(int krpId)
+        {
+            var query =
+                from p in this.Players
+                where p.KrpId == krpId
+                select p;
+
+            return query.ToList();
+        }
+
+        public void RemovePlayer(Player player)
+        {
+            this.Players.Remove(player);
+            SaveChanges();
         }
 
         // Add a DbSet for each entity type that you want to include in your model. For more information 
